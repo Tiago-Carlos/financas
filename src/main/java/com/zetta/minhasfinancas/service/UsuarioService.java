@@ -2,6 +2,8 @@ package com.zetta.minhasfinancas.service;
 
 import com.zetta.minhasfinancas.model.entity.Usuario;
 
+import java.util.Optional;
+
 public interface UsuarioService {
 
     Usuario autenticar(String email, String senha);
@@ -10,5 +12,5 @@ public interface UsuarioService {
 
     void validarEmail(String email);
 
-
+    Optional<Usuario> obterPorId(Long id);
 }
