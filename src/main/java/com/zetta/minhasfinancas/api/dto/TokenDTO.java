@@ -1,0 +1,17 @@
+package com.zetta.minhasfinancas.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+public class TokenDTO {
+
+    private String nome;
+    private Long id;
+    private String token;
+
+}
+

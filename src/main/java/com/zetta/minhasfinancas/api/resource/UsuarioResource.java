@@ -1,9 +1,11 @@
 package com.zetta.minhasfinancas.api.resource;
 
+import com.zetta.minhasfinancas.api.dto.TokenDTO;
 import com.zetta.minhasfinancas.api.dto.UsuarioDTO;
 import com.zetta.minhasfinancas.exception.ErroAutenticacao;
 import com.zetta.minhasfinancas.exception.RegraNegocioException;
 import com.zetta.minhasfinancas.model.entity.Usuario;
+import com.zetta.minhasfinancas.service.JwtService;
 import com.zetta.minhasfinancas.service.LancamentoService;
 import com.zetta.minhasfinancas.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,15 @@ import java.util.Optional;
 public class UsuarioResource {
     private final UsuarioService service;
     private final LancamentoService lancamentoService;
+    private final JwtService jwtService;
 
     @PostMapping("/autenticar")
-    public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<?> autenticar( @RequestBody UsuarioDTO dto ) {
         try {
             Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
-            return ResponseEntity.ok(usuarioAutenticado);
+            String token = jwtService.gerarToken(usuarioAutenticado);
+            TokenDTO tokenDTO = new TokenDTO( usuarioAutenticado.getNome(), usuarioAutenticado.getId(), token);
+            return ResponseEntity.ok(tokenDTO);
         }
         catch (ErroAutenticacao e) {
             return ResponseEntity.badRequest().body(e.getMessage());
